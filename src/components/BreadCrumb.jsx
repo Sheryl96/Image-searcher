@@ -9,15 +9,17 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const BreadCrumb = () => {
+const BreadCrumb = ({ onTextChange, onCountChange }) => {
     const classess = useStyles();
     return (
         <Box m = {1} className={classess.component}>
             <TextField 
                 label="Search images"
+                onChange={(e)=> onTextChange(e.target.value)}
             />
             <TextField 
                 label="Number of images"
+                onChange={(e)=> onCountChange(e.target.value)}
             />
 
         </Box>

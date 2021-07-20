@@ -1,13 +1,45 @@
+import { useEffect, useState } from 'react';
 import { Box } from '@material-ui/core';
 import NavBar from './components/NavBar';
 import BreadCrumb from './components/BreadCrumb';
+import {getImages} from './services/api';
+import Images from './components/Images';
+import SnackBar from './components/SnackBar';
 
 function App() {
+  const [ data, setData ] = useState([]);
+  const [ count, setCount ] = useState(10);
+  const [ text, setText ] = useState('nature');
+  const [ open, toggleSnack ] = useState(false);
+
+  useEffect(() => {
+     if (count  < 3 || count > 200 ){
+       toggleSnack(true);
+       return;
+     } 
+
+     toggleSnack(false);
+
+     getImages(text, count).then(response => {
+       setData(response.data.hits);
+       console.log(response.data.hits);
+     })
+  }, [text, count])
+
+  const onTextChange = (text) => {
+    setText(text);
+  }
+
+  const onCountChange = (count) => {
+    setCount(count);
+  }
+
   return (
     <Box>
       <NavBar />
-      <BreadCrumb />
-      Hello
+      <BreadCrumb onTextChange={onTextChange} onCountChange={onCountChange} />
+      <Images data={data} />
+      <SnackBar open={open} toggleSnack={toggleSnack}/>
     </Box>
   );
 }
